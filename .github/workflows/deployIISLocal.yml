@@ -7,7 +7,8 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    # VER1: runs-on: windows-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout
@@ -32,5 +33,7 @@ jobs:
 
 
       # IIS is on self-hosted runner or own Windows server 
+      # /I, xcopy assume the destination is a DIRECTORY
+      # /I, it will still fail on windows-latest, change it to: self-hosted
       - name: Deploy to IIS folder
-        run: xcopy publish "C:\ReposPUBLISH\ASPNetCore" /E /Y
+        run: xcopy publish "C:\ReposPUBLISH\ASPNetCore" /E /I /Y
