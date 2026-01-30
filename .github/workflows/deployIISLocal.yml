@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    # VER1: runs-on: windows-latest
+    # VER1: runs-on: windows-latest   
     runs-on: self-hosted
 
     steps:
@@ -25,7 +25,6 @@ jobs:
       # VER1 
       #- name: Publish
       #  run: dotnet publish -c Release -o publish
-
 
       # VER2
       - name: Publish
