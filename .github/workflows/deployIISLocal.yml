@@ -19,8 +19,8 @@ steps:
     dotnet-version: '8.0.x'
 	  
 - name: Publish
-  run: dotnet publish -c Release -o publish
+   run: dotnet publish -c Release -o publish
 
+#IIS is on self-hosted runner or own Windows server
 - name: Deploy to IIS folder
-  run:
-    xcopy publish "C:\ReposPUBLISH\ASPNetCore" /E /Y 
+   run: xcopy publish "C:\ReposPUBLISH\ASPNetCore" /E /Y 
