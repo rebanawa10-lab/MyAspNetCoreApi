@@ -1,0 +1,7 @@
+
+#Do NOT commit bin and obj
+
+bin/
+obj/
+.vs/
+appsettings.Development.json
