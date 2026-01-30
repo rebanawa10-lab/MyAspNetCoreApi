@@ -31,6 +31,6 @@ jobs:
         run: dotnet publish ProductApi.csproj -c Release -o publish
 
 
-      # IIS is on self-hosted runner or own Windows server
+      # IIS is on self-hosted runner or own Windows server 
       - name: Deploy to IIS folder
         run: xcopy publish "C:\ReposPUBLISH\ASPNetCore" /E /Y
