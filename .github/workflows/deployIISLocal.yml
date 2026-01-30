@@ -1,26 +1,26 @@
 name: Deploy ASP.NET Core API to IIS
 
 on:
-push:
-branches:
-  - main
+  push:
+    branches:
+      - main
 
 jobs:
-build:
-runs-on: windows-latest
+  build:
+    runs-on: windows-latest
 
-steps:
-- name: Checkout
-  uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-- name: Setup .NET
-  uses: actions/setup-dotnet@v4
-  with:
-    dotnet-version: '8.0.x'
-	  
-- name: Publish
-   run: dotnet publish -c Release -o publish
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-#IIS is on self-hosted runner or own Windows server
-- name: Deploy to IIS folder
-   run: xcopy publish "C:\ReposPUBLISH\ASPNetCore" /E /Y 
+      - name: Publish
+        run: dotnet publish -c Release -o publish
+
+      # IIS is on self-hosted runner or own Windows server
+      - name: Deploy to IIS folder
+        run: xcopy publish "C:\ReposPUBLISH\ASPNetCore" /E /Y
