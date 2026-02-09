@@ -45,6 +45,9 @@ var app = builder.Build();
 // Fix API root call:  https://localhost:xxxx/
 app.MapGet("/", () => "API OK");
 
+
+app.MapGet("/test", () => "API TEST OK");
+
 app.UseHttpsRedirection();  // Typical pipeline
 
 // NEW: Swagger middleware
