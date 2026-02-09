@@ -1,15 +1,16 @@
 
 // NEW:
-using ProductApi.Data;
 using Microsoft.EntityFrameworkCore;
+using ProductApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Soln # 2.1 Move here the AddControllers in the upper section 
 // NEW: # 2.1
+// Controllers
 builder.Services.AddControllers();
 
-// Angular, (ASP.NET Core API), Proper CORS policy (RECOMMENDED)
+// CORS.    Angular, (ASP.NET Core API), 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",
@@ -28,26 +29,31 @@ builder.Services.AddCors(options =>
 // OLD: # 2.1
 // builder.Services.AddControllers();
 
+// DbContext (REGISTER ONCE)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // NEW: Swagger services
 // Service registration (Dependency Injection)
+// Swagger / OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// builder.Services.AddOpenApi();  // .NET 8 dont have this. only .NET 10 SDK have this
+
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 var app = builder.Build();
 
-// Fix API root call:  https://localhost:xxxx/
-app.MapGet("/", () => "API OK");
+// Swagger (enable in Azure too)
+app.UseSwagger();
+app.UseSwaggerUI();
 
-
-app.MapGet("/test", () => "API TEST OK");
-
+// Pipeline order MATTERS
 app.UseHttpsRedirection();  // Typical pipeline
 
 // NEW: Swagger middleware
@@ -64,24 +70,24 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();     // Swagger UI middleware, Browser UI
 }
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// var summaries = new[]
+// {
+//     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+// };
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+// app.MapGet("/weatherforecast", () =>
+// {
+//     var forecast =  Enumerable.Range(1, 5).Select(index =>
+//         new WeatherForecast
+//         (
+//             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+//             Random.Shared.Next(-20, 55),
+//             summaries[Random.Shared.Next(summaries.Length)]
+//         ))
+//         .ToArray();
+//     return forecast;
+// })
+// .WithName("GetWeatherForecast");
 
 app.UseRouting();  // Soln # 2.3 NEW 
 
@@ -90,11 +96,19 @@ app.UseCors("AllowAngular");  // Soln # 2.3  NOTE:  👈 MUST be after UseRoutin
 
 // NEW: Swagger middleware
 app.UseAuthorization();     // Typical pipeline
+
 app.MapControllers();       // Typical pipeline, Soln # 2.3 NOTE: 👈 MUST be after UseCors
+
+
+// Fix API root call:  https://localhost:xxxx/
+app.MapGet("/", () => "API OK");
+
+app.MapGet("/test", () => "API TEST OK");
+
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+// record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+// {
+//     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+// }
