@@ -89,9 +89,9 @@ if (app.Environment.IsDevelopment())
 // })
 // .WithName("GetWeatherForecast");
 
-app.UseRouting();  // Soln # 2.3 NEW  
+app.UseRouting();  // Soln # 2.3 NEW   
 
-app.UseCors("AllowAngular");  // Soln # 2.3  NOTE:  👈 MUST be after UseRouting
+app.UseCors("AllowAngular");  // Soln # 2.3  NOTE:  👈 MUST be after UseRouting 
                               // NEW: Angular, UseCors must be BEFORE MapControllers().
 
 // NEW: Swagger middleware
